@@ -60,10 +60,14 @@ def gaussiana(matriz):
 
             if c > linha -1:
                 break
-            
-            if u[c][i] == 0 and i==c:
-                u[c],u[c+1] = u[c+1], u[c]
+            print(i,c)
+            if u[i][c] == 0 and i==c:
+                if i == linha -1 and c == coluna-1:
+                    break
+                u[c], u[c+1] = u[c+1], u[c]
                 p[c],p[c+1] = p[c+1], p[c]
+
+
 
             pivol = iden[c]
             pivo = u[c]
@@ -103,8 +107,9 @@ def gaussiana(matriz):
 
 
 
-salve = [[1,2],
-         [4,5]
+salve = [[1,2,2],
+         [3,2,9],
+         [2,3,5]
 ]
 
 gaussiana(salve)
