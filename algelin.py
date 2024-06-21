@@ -1,3 +1,5 @@
+#Função para transformar matriz em identidade
+
 def identidade(matriz):
     tamanho = len(matriz)
     identidade = []
@@ -12,20 +14,24 @@ def identidade(matriz):
     matriz = identidade
     return matriz  
 
-def um(linha, divisor):
+#Função para transformar o pivô de uma linha em 1
+
+def one(linha, divisor):
     result = []
     for i in range(len(linha)):
         result.append(linha[i]/divisor)
     return result
+
+#Função para fazer uma operação elementar
 
 def elementar(linha, divisor,linha2):
     result = []
     for i in range(len(linha)):
         linha[i] = linha[i] - divisor * linha2[i]
         result.append(linha[i])
-
-
     return result 
+
+#Função para multiplicar duas matrizes
 
 def multmatriz(matriz1, matriz2):
     a = matriz1
@@ -43,42 +49,41 @@ def multmatriz(matriz1, matriz2):
 
     return result            
 
-def gaussiana(matriz):
+
+
+def gaussian_elimination(matriz):
     a = matriz
     p = identidade(matriz)
     l = identidade(matriz)
     iden = identidade(matriz)
     u = matriz
-
     coluna = len(u[0])
     linha = len(u)
 
     for i in range(linha):
         for c in range(coluna):
-            
-            #pra funcionar com numero de coluna maior que o de linha
 
             if c > linha -1:
                 break
-            print(i,c)
+
+            if u[i][c] == 0 and i!=c:
+                break
+
             if u[i][c] == 0 and i==c:
                 if i == linha -1 and c == coluna-1:
                     break
                 u[c], u[c+1] = u[c+1], u[c]
                 p[c],p[c+1] = p[c+1], p[c]
 
-
-
             pivol = iden[c]
             pivo = u[c]
+
             if i == c:
                 div = u[i][c]
-                u[i] = um(u[i],div)
+                u[i] = one(u[i],div)
                 x = identidade(l)
                 x[i][c] = div
-                
                 l = multmatriz(l,x)
-
 
             elif c < i:
                 divisor = u[i][c] 
@@ -87,29 +92,6 @@ def gaussiana(matriz):
                 x = identidade(l)
 
                 x[i] = elementar(x[i],-1*divisor,pivol)
-                l = multmatriz(l,x)
+                l = multmatriz(l,x)    
 
-
-
-
-
-    print(p)
-    print(l)
-    print(u)
-       
-       
-   
-
-                       
-            
-                      
-
-
-
-
-salve = [[1,2,2],
-         [3,2,9],
-         [2,3,5]
-]
-
-gaussiana(salve)
+    return p,l,u
