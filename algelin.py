@@ -16,7 +16,7 @@ def identidade(matriz):
 
 #Função para transformar o pivô de uma linha em 1
 
-def one(linha, divisor):
+def um(linha, divisor):
     result = []
     for i in range(len(linha)):
         result.append(linha[i]/divisor)
@@ -62,25 +62,30 @@ def gaussian_elimination(matriz):
 
     for i in range(linha):
         for c in range(coluna):
-
             if c > linha -1:
-                break
-
-            if u[i][c] == 0 and i!=c:
                 break
 
             if u[i][c] == 0 and i==c:
                 if i == linha -1 and c == coluna-1:
                     break
-                u[c], u[c+1] = u[c+1], u[c]
-                p[c],p[c+1] = p[c+1], p[c]
+                for k in range(linha):
+                    if c+k < linha -1:
+                        break
+                    if k == 0:
+                        continue
+                    if u[c+k][i] != 0:
+                        u[c], u[c+k] = u[c+k], u[c]
+                        p[c],p[c+k] = p[c+k], p[c]
+                        print(p)
+                        break
+                break        
 
             pivol = iden[c]
             pivo = u[c]
 
             if i == c:
                 div = u[i][c]
-                u[i] = one(u[i],div)
+                u[i] = um(u[i],div)
                 x = identidade(l)
                 x[i][c] = div
                 l = multmatriz(l,x)
@@ -92,6 +97,32 @@ def gaussian_elimination(matriz):
                 x = identidade(l)
 
                 x[i] = elementar(x[i],-1*divisor,pivol)
-                l = multmatriz(l,x)    
+                l = multmatriz(l,x)
+                
 
-    return p,l,u
+    return u
+
+matriz = [[2,4,-1],
+          [-3,0,5],
+          [1,1,1]]
+
+matriz = [[1,1,0],
+          [2,9,0]]
+
+def is_basis(vetores):
+    u = gaussian_elimination(vetores)
+    print(u)
+    cont = 0
+    for i in range(len(u)):
+        for j in range(len(u[0])):
+            if u[i][j] != 0:
+                break
+            cont +=1
+        if cont == len(u[0]):
+            return False 
+        cont = 0
+    return True
+
+print(matriz)
+
+print(is_basis(matriz))    
