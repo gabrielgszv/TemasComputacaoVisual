@@ -1,138 +1,152 @@
-#Função para transformar matriz em identidade
+import csv
+import matplotlib.pyplot as plt
 
-def identidade(matriz):
-    tamanho = len(matriz)
-    identidade = []
-    for i in range(tamanho):
-        linha = []
-        for n in range(tamanho):
-            if i == n:
-                linha.append(1)
-            else:
-                linha.append(0)
-        identidade.append(linha)
-    matriz = identidade
-    return matriz  
+#1 Questão
 
-#Função para transformar o pivô de uma linha em 1
+#Criar um arquivo com 1000 pontos
 
-def um(linha, divisor):
-    result = []
-    for i in range(len(linha)):
-        result.append(linha[i]/divisor)
-    return result
+def write(file):
+    with open(file,'w') as f:
+        for i in range(0,1000):
+            x = -3/2 + i * 3/999
+            y = x**8 - 3*x**4 + 2*x**3 - 2*x**2 - x + 2
+            f.write(f'{x}, {y}\n')
 
-#Função para fazer uma operação elementar
+write('pontos.txt')
 
-def elementar(linha, divisor,linha2):
-    result = []
-    for i in range(len(linha)):
-        linha[i] = linha[i] - divisor * linha2[i]
-        result.append(linha[i])
-    return result 
+#Ler os 1000 pontos
+      
+vx = []
+vy = []
 
-#Função para multiplicar duas matrizes
+with open('pontos.txt') as f:
+    reader = csv.reader(f,delimiter=',')
+    for i in reader:
+        vx.append(float(i[0]))
+        vy.append(float(i[1]))
 
-def multmatriz(matriz1, matriz2):
-    a = matriz1
-    b = matriz2
-    result = []
+plt.plot(vx,vy)
+plt.show()
 
-    for i in range(len(a)):
-        linha = []
-        for o in range(len(a[0])):
-            num = 0            
-            for k in range(len(b)):
-                num +=(a[i][k] * b[k][o])
-            linha.append(num) 
-        result.append(linha)       
+#----------------------------------------
 
-    return result            
+#2 Questão
 
+#----------------------------------------
 
-
-def gaussian_elimination(matriz):
-    a = matriz
-    p = identidade(matriz)
-    l = identidade(matriz)
-    iden = identidade(matriz)
-    u = matriz
-    coluna = len(u[0])
-    linha = len(u)
-    c = 0
-
-    for i in range(linha):
-        while c < coluna:
-            if c > linha -1:
-                c +=1
-                break
-
-            if u[i][c] == 0 and i==c:
-                if i == linha -1 and c == coluna-1:
-                    c+=1
-                    break
-                for k in range(linha):
-                    if c+k > linha -1:
-                        c+=1
-                        break
-                    if k == 0:
-                        continue
-                    if u[c+k][i] != 0:
-                        u[c], u[c+k] = u[c+k], u[c]
-                        p[c],p[c+k] = p[c+k], p[c]
-                        c = 0
-                        break  
-                if c != 0:
-                    break
+def merge_intervals(lista):
+    listac = lista
+    for i in listac:
+        for j in listac:
+            if j[0] > i[0] and j[0] <= i[1]:
+                if j[1] > i[1]:
+                    l = [i[0], j[1]]
                 else:
-                    continue      
+                    l = [i[0], i[1]]
+                listac.remove(j)
+                indice = listac.index(i)
+                listac[indice] = l
+                
+              
+    return listac 
 
-            pivol = iden[c]
-            pivo = u[c]
+#----------------------------------------
 
-            if i == c:
-                div = u[i][c]
-                u[i] = um(u[i],div)
-                x = identidade(l)
-                x[i][c] = div
-                l = multmatriz(l,x)
-                for row in x:
-                    print(row)
-                print()
-                print("l: ")
-                for row in l:
-                    print(row)
-                print()
+#3 Questão
 
-            elif c < i:
-                divisor = u[i][c]
-                u[i] = elementar(u[i],divisor,pivo) 
+#----------------------------------------
 
-                x = identidade(l)
+def missing_int(nums):
+    tamanho = len(nums) -1
+    comeco = 0
+    final = tamanho
+    while comeco < final:
+       meio = (comeco + final) // 2
+       if nums[meio] > meio + nums[0]:
+           final = meio
+       else:
+           comeco = meio + 1
+    return comeco + nums[0]
 
-                x[i] = elementar(x[i],-divisor,pivol)
-                l = multmatriz(l,x)
-                for row in x:
-                    print(row)
-                print()
-                print("l: ")
-                for row in l:
-                    print(row)
-                print()
-            c+=1
-        c = 0        
+print(missing_int([1,3,5,6]))    
+
+#----------------------------------------
+
+#4 Questão
+
+#----------------------------------------
+
+#Lista encadeada da Lista 6 Questão 3
+
+class List_Node:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Linked_List:
+    def __init__(self, head = None):
+        self.head = head
+        self.length = 0
+        pointer = self.head
+        while pointer is not None:
+            self.length += 1
+            pointer = pointer.next
+
+    def __add__(self, otherList):
+        newList = Linked_List()
+        pointer1 = self.head
+        pointer2 = otherList.head
+
+        while pointer1 is not None:
+            valor = pointer1.val + pointer2.val
+            newNode = List_Node(valor) 
+            if newList.head is None:
+                newList.head = newNode 
+                anterior = newList.head 
+            else:
+                anterior.next = newNode
+                anterior = anterior.next  
+            pointer1 = pointer1.next
+            pointer2 = pointer2.next
+            
+
+        return newList  
     
-    print("PA:", multmatriz(p, a))
-    print("LU:", multmatriz(l, u))
+#Aproveitando a função inverte ordem da Lista 5 Questão 1
+                
+    def inverte_ordem(self):
+        newList = Linked_List()
+        atual = self.head
 
-    return p,l,u
+        while atual:
+            novo_no = List_Node(atual.val)
+            if not newList.head:
+                newList.head = novo_no
+            else:
+                novo_no.next = newList.head
+                newList.head = novo_no
+            newList.length += 1    
+            atual = atual.next
 
-matriz = [[2,4,-1],
-          [4,8,2],
-          [1,1,1]]
+        return newList
 
+#---------------------------
 
-for matrix in gaussian_elimination(matriz):
-    print()
-    for row in matrix:
-        print(row)
+'''
+A ideia é receber uma lista, criar uma segunda lista sendo o inverso da primeira,
+após isso comparar de nó em nó se sao todos iguais, caso sejam todos iguais retorna True,
+se tiverem algum nó diferente recebe False
+'''
+
+def comparar(lista1,lista2):
+    pointer1 = lista1.head
+    pointer2 = lista2.head
+    while pointer1 is not None:
+        
+        if pointer1.val != pointer2.val:
+            return False
+        pointer1 = pointer1.next
+        pointer2 = pointer2.next
+    return True
+
+#---------------------------
