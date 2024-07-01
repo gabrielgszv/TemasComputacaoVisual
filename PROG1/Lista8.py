@@ -12,26 +12,25 @@ def decrescente(lista1, lista2):
     newList = []
     cont = 0
     l1, l2 = 0, 0
+    tamanho = len(lista1) + len(lista2)
     while cont < len(lista1) + len(lista2):
+        if l1 == tamanho - l2 - 1:
+            print('i')
+            newList.append(lista1[l1])
+            break
         if l1 != len(lista1) and lista1[l1] > lista2[l2]:
             newList.append(lista1[l1])
             l1 += 1
+            
         else:
             newList.append(lista2[l2])
             l2 += 1         
-        cont += 1        
+        cont += 1      
     return newList    
 
 #Exemplo:
 
-print(decrescente([10,9,5,4,1],[8,7,5,3]))     
+print(decrescente([10,9,5,4,1],[8,7,5,1]))     
 
 #----------------------------------------
 
-#2 Questão
-
-def questao2(N:int, K:int, Nd:list) -> int:
-
-    return True
-
-#To fazendo ainda
