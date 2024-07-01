@@ -8,7 +8,19 @@ class Vector3D:
             result.append(self.val[i] + other_vector.val[i])
         return Vector3D(result)
     
+    def __sub__(self, other_vector):
+        result = []
+        for i in range(len(self.val)):
+            result.append(self.val[i] - other_vector.val[i])
+        return Vector3D(result)
+    
     def __mul__(self, scalar):
+        result = []
+        for i in range(len(self.val)):
+            result.append(self.val[i] * scalar)
+        return Vector3D(result)
+    
+    def __rmul__(self,scalar):
         result = []
         for i in range(len(self.val)):
             result.append(self.val[i] * scalar)
@@ -17,7 +29,10 @@ class Vector3D:
     def __str__(self):
         return str(self.val)   
     
-    
+lista = [1,2,3]    
+v1 = Vector3D(lista)
+print(v1)
+
 
 if __name__ == '__main__':
 
@@ -25,7 +40,6 @@ if __name__ == '__main__':
     v2 = Vector3D([5,7,3])
     print('Vetor 1: ', v1)
     print('Vetor 2: ', v2)
-    print('Soma dos vetores 1 e 2: ', v1+v2)
-    print('Multicação do vetor 1 por escalar 3: ', v1*3)
-
+    print('Soma dos vetores 1 e 2: ', v1-v2)
+    print('Multicação do vetor 1 por escalar 3: ', v2*3)
     
