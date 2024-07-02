@@ -43,7 +43,7 @@ class Polygons:
                     p.append((float(numeros[j]),float(numeros[j+1])))
                     j+=2  
                 pontos.append(p)    
-                cor.append(i[1])
+                cor.append(i[1][1:])
                 nome.append(i[2])
 
         return pontos, cor, nome       
@@ -67,8 +67,7 @@ def plot_polygons(poligono: Polygons):
             t.goto(k)
 
         t.goto(i[0]) 
-        cor = c[p.index(i)][1:]
-        
+        cor = c[p.index(i)]
         t.fillcolor(cor)
         t.begin_fill()
         for k in i:
@@ -80,19 +79,15 @@ def plot_polygons(poligono: Polygons):
 
 
 
-
-
-
-
 if __name__ == '__main__':
 
     poligonos = Polygons()
 
     p1 = Point2D(0,0)
-    p2 = Point2D(100,0)
+    p2 = Point2D(100,1)
     p3 = Point2D(0,245)
 
-    poligono = Polygon([p1,p2,p3],'yellow')
+    poligono = Polygon([p1,p2,p3],'green')
     poligonos.add_polygon(poligono,'primeiro')
 
     p1 = Point2D(140,-65)
@@ -111,3 +106,4 @@ if __name__ == '__main__':
     
     poligonos.save_to_file('texto.txt')
     print(plot_polygons(poligonos))
+    
