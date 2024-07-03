@@ -34,7 +34,6 @@ print(decrescente([10,9,5,4,1],[8,7,5,1]))
 
 #----------------------------------------
 
-
 #2 Questão
 
 def questao2(N:int, K:int, Nd:list) -> int:
@@ -53,3 +52,25 @@ def questao2(N:int, K:int, Nd:list) -> int:
 print(questao2(6,2,[1,1,1,3,4,1]))
 
 #----------------------------------------
+
+#3 Questão
+
+def questao3(texto):
+    c = 0
+    
+    for i in texto:
+        if i == '(':
+            c += 1
+        if i == ')':
+            c -= 1
+        if c < 0:
+            return False
+        
+    if c == 0:
+        return True
+    else:
+        return False  
+
+#----------------------------------------      
+
+
