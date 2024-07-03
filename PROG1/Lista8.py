@@ -34,3 +34,22 @@ print(decrescente([10,9,5,4,1],[8,7,5,1]))
 
 #----------------------------------------
 
+
+#2 Questão
+
+def questao2(N:int, K:int, Nd:list) -> int:
+    anteriores = []
+    qtd = 0
+    for i in range(N):
+        if Nd[i] in anteriores:
+            continue
+        else:
+            if len(anteriores) == K:
+                anteriores.pop(0)
+            anteriores.append(Nd[i])
+            qtd += 1
+    return qtd
+
+print(questao2(6,2,[1,1,1,3,4,1]))
+
+#----------------------------------------
