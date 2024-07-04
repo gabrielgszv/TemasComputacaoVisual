@@ -66,7 +66,6 @@ class Polygons:
                     
 
 
-
 #5 Questao
 
 def plot_polygons(poligono: Polygons):
@@ -101,33 +100,33 @@ if __name__ == '__main__':
 
     poligonos = Polygons()
 
-    p1 = Point2D(0,0)
-    print(p1)
-    p2 = Point2D(100,1)
-    p3 = Point2D(0,245)
-    p4 = Point2D(-100,214)
+    p1 = Point2D(100,100)
+    p2 = Point2D(200,100)
+    p3 = Point2D(150,300)
 
-    poligono = Polygon([p1,p2,p3,p4],'green')
-    print(poligono)
-    poligonos.add_polygon(poligono,'primeiro')
+    poligono = Polygon([p1,p2,p3],'green')
+    poligonos.add_polygon(poligono,'triangulo')
 
-    p1 = Point2D(140,-65)
-    p2 = Point2D(33,-21)
-    p3 = Point2D(12,-92)
+    p1 = Point2D(-100,100)
+    p2 = Point2D(-100,200)
+    p3 = Point2D(-200,200)
+    p4 = Point2D(-200,100)
 
-    poligono = Polygon([p1,p2,p3],'red')
-    poligonos.add_polygon(poligono,'segundo')
+    poligono = Polygon([p1,p2,p3,p4],'blue')
+    poligonos.add_polygon(poligono,'quadrado')
 
-    p1 = Point2D(-123,-234)
-    p2 = Point2D(24,365)
-    p3 = Point2D(-310,92)
+    p1 = Point2D(-250,-100)
+    p2 = Point2D(-350,-150)
+    p3 = Point2D(-300,-250)
+    p4 = Point2D(-200,-250)
+    p5 = Point2D(-150,-150)
 
-    poligono = Polygon([p1,p2,p3],'blue')
-    poligonos.add_polygon(poligono,'terceiro')
+    poligono = Polygon([p1,p2,p3,p4,p5],'red')
+    poligonos.add_polygon(poligono,'pentagono')
     
     poligonos.save_to_file('texto.txt')
     poligonos.load_from_file('puxar.txt')
     poligonos.save_to_file('texto.txt')
 
-    print(plot_polygons(poligonos))
+    #print(plot_polygons(poligonos))
     
