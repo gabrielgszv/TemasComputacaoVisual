@@ -14,6 +14,11 @@ class Polygons:
     def __init__(self):
         self.polygons = {}
 
+    def printarkeys(self):
+        for i in self.polygons:
+            print('k')
+            print(i)   
+
     def add_polygon(self, polygon: Polygon, name: str):    
         self.polygons[name] = polygon
 
@@ -32,28 +37,37 @@ class Polygons:
             padrao = r'\((-?\d+),\s*(-?\d+)\)'
             for linha in f:
                 #em cada linha criar um objeto do tipo polygon
-                poligono = []
-                pontos = re.findall(padrao, linha)
+                pontospoligono = []
+                #receber os pontos
+                partes = linha.split('; ')
+                cor = partes[1]
+                nome = partes[2][0:-1]
+                pontos = re.findall(padrao, partes[0])
                 j = 0
+                p = []
+                print(nome)
+                for tupla in pontos:
+                    for i in tupla:
+                        p.append(int(i))
                 while j < len(pontos) -1:
-                    point = Point2D(pontos[j], pontos[j+1])
-                    poligono.append(point)
-                    j += 1
-                print(poligono)
+                    point = Point2D(p[j], p[j+1])
+                    pontospoligono.append(point)
+                    j += 1   
+                poligono = Polygon(pontospoligono, cor)
+                self.add_polygon(poligono, nome)  
 
-        
-        return True      
+                    
 
 
 
 #5 Questao
-
+'''
 def plot_polygons(poligono: Polygons):
     screen = turtle.Screen()
 
     t = turtle.Turtle()
 
-    p, c, n = poligono.load_from_file('texto.txt')
+    poligono.load_from_file('texto.txt')
     for i in p:
         t.penup()
         t.goto(i[0])
@@ -72,7 +86,7 @@ def plot_polygons(poligono: Polygons):
 
     screen.exitonclick()      
 
-
+'''
 
 
 if __name__ == '__main__':
@@ -101,6 +115,8 @@ if __name__ == '__main__':
     poligono = Polygon([p1,p2,p3],'blue')
     poligonos.add_polygon(poligono,'terceiro')
     
+    poligonos.save_to_file('texto.txt')
+    poligonos.load_from_file('puxar.txt')
     poligonos.save_to_file('texto.txt')
 
     print(plot_polygons(poligonos))
