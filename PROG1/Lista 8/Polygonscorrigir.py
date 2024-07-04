@@ -35,21 +35,24 @@ class Polygons:
     def load_from_file(self, filename: str):
         with open(filename, 'r') as f:
             padrao = r'\((-?\d+),\s*(-?\d+)\)'
+            i = 0
             for linha in f:
                 #em cada linha criar um objeto do tipo polygon
                 pontospoligono = []
                 #receber os pontos
                 partes = linha.split('; ')
                 cor = partes[1]
-                nome = partes[2][0:-1]
+                nome = partes[2]
+                if partes[2][-1] == '\n':
+                    nome = partes[2][0:-1]
+                
                 pontos = re.findall(padrao, partes[0])
                 j = 0
                 p = []
-                print(nome)
                 for tupla in pontos:
                     for i in tupla:
                         p.append(int(i))
-                while j < len(pontos) -1:
+                while j < len(pontos) :
                     point = Point2D(p[j], p[j+1])
                     pontospoligono.append(point)
                     j += 1   
@@ -61,32 +64,33 @@ class Polygons:
 
 
 #5 Questao
-'''
+
 def plot_polygons(poligono: Polygons):
     screen = turtle.Screen()
 
     t = turtle.Turtle()
-
-    poligono.load_from_file('texto.txt')
-    for i in p:
+    poligonos = poligono.polygons
+    p = []
+    for k in poligonos:
+        p = poligonos[k].points
         t.penup()
-        t.goto(i[0])
+        t.goto(p[0].coord)
         t.pendown()
 
-        for k in i:
-            t.goto(k)
+        for i in p:
+            t.goto(i.coord)
 
-        t.goto(i[0]) 
-        cor = c[p.index(i)]
+        t.goto(p[0].coord) 
+        cor = poligonos[k].color
         t.fillcolor(cor)
         t.begin_fill()
-        for k in i:
-            t.goto(k)
+        for i in p:
+            t.goto(i.coord)
         t.end_fill()
-
+        
     screen.exitonclick()      
 
-'''
+
 
 
 if __name__ == '__main__':
