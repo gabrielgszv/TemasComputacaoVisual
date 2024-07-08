@@ -1,6 +1,8 @@
 import turtle
 import re
 
+#Funções __str__ estão ai só para deixar mais facil de printar
+
 class Point2D:
     def __init__(self, x, y):
         self.coord = (x, y)
@@ -73,9 +75,7 @@ class Polygons:
                     j += 1   
                 #Criando o poligono com os dados coletados da linha e adicionando aos poligonos    
                 poligono = Polygon(pontospoligono, cor)
-                self.add_polygon(poligono, nome)  
-
-                    
+                self.add_polygon(poligono, nome)        
 
 #5 Questao
 
@@ -105,7 +105,6 @@ def plot_polygons(poligono: Polygons):
         
     screen.exitonclick()  
     
-        
 
 if __name__ == '__main__':
     #Função apenas para deixar mais facil de printar varias vezes
@@ -161,5 +160,4 @@ if __name__ == '__main__':
 
     poligonos.save_to_file('poligonos.txt') 
 
-    #plot_polygons(poligonos)
     
