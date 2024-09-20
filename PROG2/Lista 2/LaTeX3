@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\begin{document}
+
+Temos que \( n^2 + 1000n = O(n^2) \). Pela definição:
+
+\begin{align*}
+n^2 + 1000n &\leq c \cdot n^2
+\end{align*}
+
+Agora dividindo os dois lados por \( n^2 \):
+
+\begin{align*}
+1 + \frac{1000}{n} &\leq c
+\end{align*}
+
+Observamos que, quanto mais \( n \) cresce, \( \frac{1000}{n} \) diminui, o que implica que $1 + \frac{1000}{n}$ será menor ou igual a uma constante $c$.
+
+{Escolhendo \( N = 1 \), temos que achar um \( c \) para que todo \( n \geq N \) satisfaça a desigualdade, então:}
+
+\begin{align*}
+c &= 1 + \frac{1000}{1} = 1001
+\end{align*}
+
+Tomando \( c = 1001 \), teremos que:
+
+\[
+1 + \frac{1000}{n} \leq 1001 \quad \text{é verdade para qualquer } n.
+\]
+
+\end{document}
+
+
+\end{document}
