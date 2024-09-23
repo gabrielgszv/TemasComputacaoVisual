@@ -26,7 +26,6 @@ class My_Array:
 #Questão 2
 
 #-----------------------------
-  
 
 class ToroArray(My_Array):
     def __init__(self, elements):
@@ -36,23 +35,19 @@ class ToroArray(My_Array):
 
     def __getitem__(self, index):
         if index < 0:
-            pass
+            while index < 0:
+                index += self.size
         else:
             index = index % (self.size)
-        return self.elements[index]         
+        return self.elements[index]     
 
+#Exemplo da questão 2:
 
-
+'''
 toro = ToroArray([10, 11, 12, 13, 14])
-i = True
-print(toro[-1])
-while(i):
-    print('add')
-    toro.append(input())
-    print(toro.elements[:toro.size])
-    print(toro.size)
-    print(toro.capacity)
-    print(' ')
+print(toro[6])
+print(toro[-20])
+'''
 
 #-----------------------------
     
