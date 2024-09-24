@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 
 #-----------------------------
@@ -6,7 +8,7 @@ import numpy as np
 
 #-----------------------------
 
-class My_Array:
+class My_Array():
     def __init__(self):
         self.elements = np.empty(1)
         self.size = 0   
@@ -21,34 +23,51 @@ class My_Array:
         self.elements[self.size] = element
         self.size += 1 
 
+#Comparando o My_Array com a lista do python
+
+Marray = My_Array()
+lista = []
+
+inicio = time.time()
+for i in range(1000):
+    Marray.append(i)
+fim = time.time()
+print(f"Tempo de execução do My_Array: {fim - inicio}")
+
+inicio = time.time()
+for i in range(1000):
+    lista.append(i)
+fim = time.time()
+print(f"Tempo de execução da Lista: {fim - inicio}")
+
+
+#Rodando vemos que a Lista é mais eficiente
+
 #-----------------------------
     
 #Questão 2
 
 #-----------------------------
 
-class ToroArray(My_Array):
-    def __init__(self, elements):
-        super().__init__()
-        for i in elements:
-            self.append(i)
+class ToroArray(np.ndarray):
+
+    def __new__(cls, input_array):
+        obj = np.asarray(input_array).view(cls)  # Convert the input array and create a view as this class
+        return obj
+
+    def __init__(self, inputArray):
+        self.dim = np.prod(self.shape)  # Calculate and store the product of dimensions of the array
 
     def __getitem__(self, index):
-        if index < 0:
-            while index < 0:
-                index += self.size
-        else:
-            index = index % (self.size)
-        return self.elements[index]     
+        index = index % (self.dim)
+        return self.item(index)         
 
 #Exemplo da questão 2:
-
 '''
 toro = ToroArray([10, 11, 12, 13, 14])
 print(toro[6])
 print(toro[-20])
 '''
-
 #-----------------------------
     
 #Questão 3
@@ -129,3 +148,4 @@ Volta
     É analogo, mudando apenas que começa com o f sendo Theta(g)
 
 '''
+
