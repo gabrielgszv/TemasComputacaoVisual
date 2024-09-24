@@ -25,6 +25,7 @@ class My_Array():
 
 #Comparando o My_Array com a lista do python
 
+
 Marray = My_Array()
 lista = []
 
