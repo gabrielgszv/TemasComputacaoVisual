@@ -209,7 +209,7 @@ enquanto os 2 valores forem diferentes, quando nao é mais considerado diferente
 é suficientemente pequeno para nao fazer diferença
 '''
 
-#Escrevendo em função de n para facilitar na proxima questão
+#Escrevendo em função de n para nao reescrever na proxima questão
 
 def calc_eps(n):
     epsilon = n
@@ -217,15 +217,19 @@ def calc_eps(n):
         epsilon = epsilon/2
     epsilon *= 2
     return epsilon
+
 print('Epsilon de 1:')
-print(calc_eps(1))    
+print(calc_eps(1)) 
+
 #-----------------------------
     
 #Questão 4
 
 #-----------------------------  
+
 print('Epsilon de 10^6:')
 print(calc_eps(10**6))
+print('')
 
 '''
 Vemos que o epsilon de 10^6 se torna maior que o epsilon de 1,
@@ -238,3 +242,27 @@ ja que a correcao de um é maior que a do outro
 #Questão 5
 
 #-----------------------------  
+
+'''
+Criaria uma classe numérica que trataria essas medidas separadas,
+como por exemplo, ao criar uma instancia informar que um espaco tem km == 10 e mm = 45,
+assim essas medidas poderiam ser utilizadas em um unico lugar,
+mas ao mesmo tempo essas mediddas estariam "separadas" para melhor tratamento,
+assim evitando erros de medidas muito pequenas com muito grandes.
+Como por exemplo no codigo abaixo:
+'''
+
+class ClasseNumerica:
+    def __init__(self, km = 0, mm = 0):
+        self.km = km 
+        self.mm = mm
+        
+
+    def __str__(self):
+        return f'{self.km} km e {self.mm} mm'
+    
+
+med1 = ClasseNumerica(50)
+med2 = ClasseNumerica(23,6)
+print(med1)
+print(med2)
