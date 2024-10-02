@@ -166,6 +166,7 @@ class Vector3D(RealVector):
     def __abs__(self):
         return super().__abs__()
     
+#Testes    
 '''
 vec1 = Vector3D([0.2, 0.4, 0.3])
 vec2 = Vector3D([0.6, 0.2, 0.6])
@@ -175,10 +176,28 @@ vecr = Vector3D([1.7, 0.7, 1.6])
 
 print('Vetor 1: ',vec1+vec2+vec3)
 print('Vetor 2: ',vecr)
-print('\nNorma do Vetor 1: ',(vec1+vec2+vec3).__abs__())
-print('Norma do Vetor 2: ',vecr.__abs__())
-print('\n',(vec1+vec2+vec3) < vecr)
+print('É igual? ', vec1+vec2+vec3 == vecr)
 '''
+
+
+#-----------------------------
+    
+#Questão 2
+
+#-----------------------------
+
+'''
+Pelo sinal teremos 1 bit.
+Para escrever um digito na base b representamos com log de b na base 2,
+e como temos que a precisão é p, fica entao p * (log de b na base 2) bits.
+Para o expoente e, temos que o numero total de valores é emax - emin + 1,
+e a quantidade de bits é log de n na base 2, sendo n = emax - emin + 1.
+Então a quantidade de bits necessaria para representar um numero de ponto flutuante,
+em termos de b, p, emax e emin é a soma de tudo
+1 + p * (log de b na base 2) + (log de emax - emin + 1 na base 2)
+
+'''
+
 #-----------------------------
     
 #Questão 3
@@ -207,3 +226,15 @@ print(calc_eps(1))
 #-----------------------------  
 print('Epsilon de 10^6:')
 print(calc_eps(10**6))
+
+'''
+Vemos que o epsilon de 10^6 se torna maior que o epsilon de 1,
+o que poderia impactar em possiveis erros de comparação,
+ja que a correcao de um é maior que a do outro
+'''
+
+#-----------------------------
+    
+#Questão 5
+
+#-----------------------------  
