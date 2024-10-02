@@ -250,19 +250,21 @@ assim essas medidas poderiam ser utilizadas em um unico lugar,
 mas ao mesmo tempo essas mediddas estariam "separadas" para melhor tratamento,
 assim evitando erros de medidas muito pequenas com muito grandes.
 Como por exemplo no codigo abaixo:
+(No exemplo converti as medidas para metro e somei, mas pode ser feito com qualquer medida)
 '''
 
 class ClasseNumerica:
     def __init__(self, km = 0, mm = 0):
         self.km = km 
         self.mm = mm
+        self.val = km * 10**3+ mm * 10**-3
         
 
     def __str__(self):
-        return f'{self.km} km e {self.mm} mm'
+        return f'{self.val} m'
     
 
-med1 = ClasseNumerica(50)
-med2 = ClasseNumerica(23,6)
+med1 = ClasseNumerica(50000, 65)
+med2 = ClasseNumerica(23, 6)
 print(med1)
 print(med2)
