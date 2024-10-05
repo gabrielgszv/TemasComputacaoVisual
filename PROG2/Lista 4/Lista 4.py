@@ -1,10 +1,17 @@
 import random
+import numpy as np
+import scipy
+
 
 class TreeNode:
     def __init__(self, val=0):
         self.val = val
         self.left = None
         self.right = None
+
+#Função do Emílio para criar árvores de busca binaria
+
+#---------------------------------------------------------------------------------------
 
 # Function to create a BST from a list of nodes
 def create_tree(nodes):
@@ -51,6 +58,8 @@ def inorder_traversal(node):
 # Test the tree structure
 inorder_traversal(tbs)
 
+#---------------------------------------------------------------------------------------
+
 #-----------------------------
 
 #Questão 1
@@ -83,10 +92,6 @@ def balanced(tree):
         return False
     
     return balanced(tree.left) and balanced(tree.right)
-    
-  
-
-print(balanced(tbs))
 
 #-----------------------------
 
@@ -99,11 +104,18 @@ class Pilha:
     def __init__(self, elements = []):
         self.elements = elements
 
+    '''
+    Como para remover o ultimo elemento de uma lista, metodo pop do python tem complexidade O(1) que é constante,
+    aproveitando disso essa função escolhe um indice aleatorio e troca ele para colocar no ultimo elemento,
+    assim usando o metodo pop para remover e ter tempo constante.
+    '''    
+
     def pop(self):
-        ran_element = random.choice(self.elements)
-        print(ran_element)
-        self.elements.remove(ran_element)
-        return ran_element
+        random_index = random.randint(0, len(self.elements) - 1)
+        element = self.elements[random_index]
+        self.elements[random_index], self.elements[-1] = self.elements[-1], self.elements[random_index]
+        self.elements.pop()
+        return element
     
     def push(self, element):
         self.elements.append(element)
@@ -115,7 +127,7 @@ list1 = []
 
 inicio = time.time()
 
-for i in range(0,100000):
+for i in range(1000000):
     pilha1.push(i)
 
 fim = time.time()
@@ -127,20 +139,68 @@ print(final)
 
 inicio = time.time()
 
-for i in range(0,100000):
+for i in range(1000000):
     list1.append(i)
 
 fim = time.time()
 
 final = fim - inicio
 print(final)
+'''
+tempo do pop
+'''
+for i in range(3):
+        
+    inicio = time.time()
 
-inicio = time.time()
+    pilha1.pop()
 
-pilha1.pop()
+    fim = time.time()
 
-fim = time.time()
+    final = fim - inicio
+    print(final)
 
-final = fim - inicio
-print(final)
+#-----------------------------
 
+#Questão 4
+
+#-----------------------------
+
+'''
+Para as distribuições uniforme e normal, a biblioteca random ja tem as funções,
+e para a distribuição student t, a biblioteca scipy tem a função.
+A função recebe o número de pontos e o tipo de distribuição de x e y separadamente
+'''
+
+def uniforme(N):
+    k = np.random.uniform(-1, 1 ,N)
+    return k
+
+def normal(N):
+    k = np.random.normal(0, 0.5, N)
+    return k
+
+def student_t(N):
+    k = scipy.stats.t.rvs(df=2, size=N) * 0.5
+    return k
+
+def sorteio(N, tx ,ty):
+    x = tx(N)
+    y = ty(N)
+    return np.column_stack((x, y))
+
+pontoos = sorteio(10, normal, student_t)
+
+#-----------------------------
+
+#Questão 5
+
+#-----------------------------
+
+def fecho_convexo(pontos):
+    fecho = scipy.spatial.ConvexHull(pontos)
+    '''
+    Fecho é um obejto da classe ConvexHull, que tem atributos como esse usado no retorno,
+    que tem o indice dos vertices do poligono convexo
+    '''
+    return pontos[fecho.vertices]
