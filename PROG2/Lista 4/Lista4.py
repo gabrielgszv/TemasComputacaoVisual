@@ -98,6 +98,7 @@ def balanced(tree):
 #Questão 2
 
 #-----------------------------
+
 import time 
 
 class Pilha:
@@ -133,7 +134,7 @@ for i in range(1000000):
 fim = time.time()
 
 final = fim - inicio
-print(final)
+print('Adicionar 1000000 elementos na pilha: ',final)
 
 #Adicionar 1000000 elementos na lista do python
 
@@ -145,11 +146,11 @@ for i in range(1000000):
 fim = time.time()
 
 final = fim - inicio
-print(final)
-'''
-tempo do pop
-'''
-for i in range(3):
+print('Adicionar 1000000 elementos na Lista Python: ',final)
+
+#Tempo do pop
+print('Tempos de 5 vezes a função pop da pilha: ')
+for i in range(5):
         
     inicio = time.time()
 
@@ -162,22 +163,41 @@ for i in range(3):
 
 #-----------------------------
 
+#Questão 3
+
+#-----------------------------
+
+
+'''
+Utilizaria o conceito parecido da árvore binaria, mas em vez de adicionar elementos a esquerda ou a diretira,
+adicionaria na direção n, sendo n um numero, assim um único nó poderia ter um numero variavel de filhos.
+
+(a) O nó teria uma variavel com seu valor e outra variavel que é uma lista,
+nessa lista os elementos seriam as direções dos filhos do nó, levando para eles. 
+
+(b) Não tenho ideia :)
+
+(c) Passaria por cada filho da raiz, e usando recorrencia passar pelos filhos do filho
+e assim por diante, passando por todos no final
+'''    
+
+#-----------------------------
+
 #Questão 4
 
 #-----------------------------
 
 '''
-Para as distribuições uniforme e normal, a biblioteca random ja tem as funções,
-e para a distribuição student t, a biblioteca scipy tem a função.
+Usando as funções uniform, norm e t, do scipy, que sao respectivamente, uniforme, normal e t student.
 A função recebe o número de pontos e o tipo de distribuição de x e y separadamente
 '''
 
 def uniforme(N):
-    k = np.random.uniform(-1, 1 ,N)
+    k = scipy.stats.uniform.rvs(-1, 2, size=N)
     return k
 
 def normal(N):
-    k = np.random.normal(0, 0.5, N)
+    k = scipy.stats.norm.rvs(loc=0, scale=0.5, size=N)
     return k
 
 def student_t(N):
@@ -189,7 +209,8 @@ def sorteio(N, tx ,ty):
     y = ty(N)
     return np.column_stack((x, y))
 
-pontoos = sorteio(10, normal, student_t)
+#Exemplo
+points = sorteio(10, normal, student_t)
 
 #-----------------------------
 
@@ -204,3 +225,6 @@ def fecho_convexo(pontos):
     que tem o indice dos vertices do poligono convexo
     '''
     return pontos[fecho.vertices]
+
+#Exemplo
+fechoconv = fecho_convexo(points)
