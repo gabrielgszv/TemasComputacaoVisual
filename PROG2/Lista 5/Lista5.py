@@ -29,13 +29,13 @@ def generate_maze(m, n, room = 0, wall = 1, cheese = '.' ):
 
     def dfs(x, y):
         """Recursive DFS to generate the maze."""
-        # Mark the current cell as visited by making it a path (room)
+        # Mark the current cell as visited by making it a caminho (room)
         pilha = [(x,y)]        
         maze[2 * x + 1][2 * y + 1] = room
 
         while pilha:
             cx, cy = pilha.pop()
-            # Shuffle the directions to create a random path
+            # Shuffle the directions to create a random caminho
             random.shuffle(directions)
             for dx, dy in directions:
                 nx, ny = cx + dx, cy + dy  # New cell coordinates
@@ -47,7 +47,7 @@ def generate_maze(m, n, room = 0, wall = 1, cheese = '.' ):
                     # Recursively visit the new cell
                     pilha.append((nx,ny))
 
-    # Start DFS from the top-left corner (0, 0) of the logical grid
+    # pinicio DFS from the top-left corner (0, 0) of the logical grid
     dfs(0, 0)
     count = 0
     while True: # placing the chesse
@@ -84,12 +84,26 @@ def print_maze(maze):
 #Questão 3
 
 #---------------------------------------------------------------------------------------
+
+'''
+Essa bomba funciona mas n sei como, 
+depois eu completo, reviso e escrevo melhor
+'''
+
+
+'''
+Acho que nao é a melhor implementação, mas a ideia que tive foi passar por todos os caminhos,
+guardar todos os pontos que passou em uma lista para nao passar novamente,
+e o caminho sendo adicionado em uma pilha.
+e teve uso de busca em profundidade, 
+ja que teve o uso de pilha para guardar o caminho percorrido ate encontrar o queijo
+'''
+
 def achar_caminho(maze):
     pinicio = (1, 1)
     print_maze(maze)
     lista = []
 
-    # Direções na ordem: esquerda, baixo, direita, cima
     direcoes = [(0, -1), (1, 0), (0, 1), (-1, 0)]
     
     pilha = [(pinicio, [pinicio])]
@@ -114,3 +128,13 @@ def achar_caminho(maze):
             if maze[xn][yn] != 'H':
                 pilha.append(((xn, yn), caminho + [(xn, yn)]))
 
+
+# Exemplo de uso
+if __name__ == '__main__':
+    # random.seed(10110)    
+    m, n = 5, 7
+    room = ' '
+    wall = 'H'
+    cheese = '*'
+    maze = generate_maze(m, n, room, wall, cheese)
+    print('\nMaze 2')
