@@ -65,7 +65,7 @@ def print_maze(maze):
         print(" ".join(map(str, row)))
 
 # Example usage:
-if __name__ == '__main__':
+'''if __name__ == '__main__':
     m, n = 5, 7  # Grid size
     # random.seed(10110)
     maze = generate_maze(m, n)
@@ -77,11 +77,40 @@ if __name__ == '__main__':
     cheese = '*'
     maze = generate_maze(m, n, room, wall, cheese)
     print('\nMaze 2')
-    print_maze(maze)
+    print_maze(maze)'''
 
 #---------------------------------------------------------------------------------------
 
 #Questão 3
 
 #---------------------------------------------------------------------------------------
+def achar_caminho(maze):
+    pinicio = (1, 1)
+    print_maze(maze)
+    lista = []
+
+    # Direções na ordem: esquerda, baixo, direita, cima
+    direcoes = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+    
+    pilha = [(pinicio, [pinicio])]
+
+    while pilha:
+        (x, y), caminho = pilha.pop()
+
+        if (x, y) in lista:
+            continue
+        lista.append((x, y))
+
+        if maze[x][y] == '*':
+            print("Caminho até o queijo:", caminho)
+            for k in caminho:
+                xs, ys = k
+                maze[xs][ys] = '+'
+            print_maze(maze)
+            break
+
+        for dx, dy in direcoes:
+            xn, yn = x + dx, y + dy
+            if maze[xn][yn] != 'H':
+                pilha.append(((xn, yn), caminho + [(xn, yn)]))
 
