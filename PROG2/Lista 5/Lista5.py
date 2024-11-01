@@ -20,40 +20,39 @@ para quando chegar no final, usar o "last in, first out" para voltar e encontrar
 
 import random
 
+#Codigo do CodigosExcercicios/maze builder.py
+
 def generate_maze(m, n, room = 0, wall = 1, cheese = '.' ):
-    # Initialize a (2m + 1) x (2n + 1) matrix with all walls (1)
+    
     maze = [[wall] * (2 * n + 1) for _ in range(2 * m + 1)]
 
-    # Directions: (row_offset, col_offset) for N, S, W, E
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
     def dfs(x, y):
-        """Recursive DFS to generate the maze."""
-        # Mark the current cell as visited by making it a caminho (room)
+
         pilha = [(x,y)]        
         maze[2 * x + 1][2 * y + 1] = room
 
         while pilha:
             cx, cy = pilha.pop()
-            # Shuffle the directions to create a random caminho
+            
             random.shuffle(directions)
             for dx, dy in directions:
-                nx, ny = cx + dx, cy + dy  # New cell coordinates
+                nx, ny = cx + dx, cy + dy  
+
                 if 0 <= nx < m and 0 <= ny < n and maze[2 * nx + 1][2 * ny + 1] == wall:
-                    # Open the wall between the current cell and the new cell
+                    
                     maze[2 * cx + 1 + dx][2 * cy + 1 + dy] = room
-                    #Marcar onde foi visitado
+                    
                     maze[2 * nx + 1][2 * ny + 1] = room
-                    # Recursively visit the new cell
+                    
                     pilha.append((nx,ny))
 
-    # pinicio DFS from the top-left corner (0, 0) of the logical grid
     dfs(0, 0)
-    count = 0
-    while True: # placing the chesse
+
+    while True: 
         i = int(random.uniform(0, 2 * m))
         j = int(random.uniform(0, 2 * m))
-        count += 1
         if maze[i][j] == room:
             maze[i][j] = cheese 
             break
@@ -64,20 +63,7 @@ def print_maze(maze):
     for row in maze:
         print(" ".join(map(str, row)))
 
-# Example usage:
-'''if __name__ == '__main__':
-    m, n = 5, 7  # Grid size
-    # random.seed(10110)
-    maze = generate_maze(m, n)
-    print('Maze 1')
-    print_maze(maze)
-
-    room = ' '
-    wall = 'H'
-    cheese = '*'
-    maze = generate_maze(m, n, room, wall, cheese)
-    print('\nMaze 2')
-    print_maze(maze)'''
+#Exemplo do labirinto no fim da Questão 3
 
 #---------------------------------------------------------------------------------------
 
@@ -86,24 +72,17 @@ def print_maze(maze):
 #---------------------------------------------------------------------------------------
 
 '''
-Essa bomba funciona mas n sei como, 
-depois eu completo, reviso e escrevo melhor
-'''
-
-
-'''
 Acho que nao é a melhor implementação, mas a ideia que tive foi passar por todos os caminhos,
 guardar todos os pontos que passou em uma lista para nao passar novamente,
-e o caminho sendo adicionado em uma pilha.
-e teve uso de busca em profundidade, 
-ja que teve o uso de pilha para guardar o caminho percorrido ate encontrar o queijo
+e o caminho que chega ao queijo vai sendo adicionado em uma pilha, retirando os pontos em que passou mas voltou.
+E teve uso de busca em profundidade, ja que teve pilha para guardar o caminho percorrido ate encontrar o queijo
 '''
 
 def achar_caminho(maze):
     pinicio = (1, 1)
-    print_maze(maze)
     lista = []
 
+    # Direções na ordem: esquerda, baixo, direita, cima
     direcoes = [(0, -1), (1, 0), (0, 1), (-1, 0)]
     
     pilha = [(pinicio, [pinicio])]
@@ -116,10 +95,10 @@ def achar_caminho(maze):
         lista.append((x, y))
 
         if maze[x][y] == '*':
-            print("Caminho até o queijo:", caminho)
             for k in caminho:
                 xs, ys = k
                 maze[xs][ys] = '+'
+            print('Caminho:')
             print_maze(maze)
             break
 
@@ -128,13 +107,121 @@ def achar_caminho(maze):
             if maze[xn][yn] != 'H':
                 pilha.append(((xn, yn), caminho + [(xn, yn)]))
 
-
-# Exemplo de uso
 if __name__ == '__main__':
-    # random.seed(10110)    
     m, n = 5, 7
     room = ' '
     wall = 'H'
     cheese = '*'
     maze = generate_maze(m, n, room, wall, cheese)
-    print('\nMaze 2')
+    print('\nLabirinto:')
+    print_maze(maze)                
+    achar_caminho(maze)
+
+#---------------------------------------------------------------------------------------
+    
+#Questão 4
+
+#---------------------------------------------------------------------------------------
+
+class Grafo:
+    def __init__(self):
+        self.grafo = {}
+
+    def adjacent(self, x, y):
+        if x in self.grafo:
+            if y in self.grafo[x]:
+                return True
+        return False    
+
+    def neighbors(self, x) -> list:
+        return list(self.grafo[x]['Vizinhos'])
+
+    def add_vertex(self, x):
+        if x in self.grafo:
+            return False
+        else:
+            self.grafo[x] = {'Vizinhos': []}
+            return True
+        
+    def remove_vertex(self, x):
+        if x in self.grafo:
+            self.grafo.pop(x)
+            return True    
+        else:
+            return False
+
+    def add_edge(self, x, y):
+        if y in self.grafo[x]:
+            return False
+        self.grafo[x]['Vizinhos'].append(y)
+        return True
+        
+    def remove_edge(self, x, y):
+        if y in self.grafo[x]:
+            self.grafo[x].pop(y)
+            return True
+        return False
+    
+    def get_vertex_value(self, x):
+        if x in self.grafo:
+            if 'Valor' in self.grafo[x]:
+                return self.grafo[x]['Valor']
+            else:
+                return None
+
+    def set_vertex_value(self, x, v):
+        if x in self.grafo.keys():
+            self.grafo[x]['Valor'] = v    
+
+#Testes da questão 4
+
+if __name__ == '__main__':
+
+    #Criando o Grafo
+    grafot = Grafo()
+
+    #Adicionando vértices ao grafo
+    grafot.add_vertex('A')
+    grafot.add_vertex('B')
+    grafot.add_vertex('C')
+    grafot.add_vertex('D')
+    grafot.add_vertex('E')
+
+    #Adicionando arestas entre alguns vértices
+    grafot.add_edge('A','B')
+    grafot.add_edge('A','C')
+    grafot.add_edge('B','E')
+    grafot.add_edge('B','C')
+    grafot.add_edge('D','B')
+    grafot.add_edge('D','E')
+
+    #Verificando se os vértices são adjacentes
+    print(grafot.adjacent('A','B'))
+    print(grafot.adjacent('B','C'))
+
+    #Verificando os vizinhos 
+    print(grafot.neighbors('A'))
+
+    #Removendo vértice (Se existir)
+    print(grafot.remove_vertex('E'))
+
+    #Removendo aresta (Se existir)
+    print(grafot.remove_edge('D','C'))
+
+    #Adicionando valores aos vértices
+    grafot.set_vertex_value('A', 10)
+    grafot.set_vertex_value('B', 20)
+    grafot.set_vertex_value('C', 30)
+    grafot.set_vertex_value('D', 40)
+
+    #Retornando o valor do vértice
+    print(grafot.get_vertex_value('A'))
+
+    #Grafo inteiro
+    print(grafot.grafo)
+
+    '''
+    Apenas não resolvi resolvi um 'problema' ao remover um vertice,
+    se um vertice x estiver conectado com um y, e esse vértice y for excluido,
+    o x ainda conta o y como o vizinho, mesmo ele estando apagado
+    '''
