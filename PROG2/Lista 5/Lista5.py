@@ -129,9 +129,9 @@ class Grafo:
 
     def adjacent(self, x, y):
         if x in self.grafo:
-            if y in self.grafo[x]:
+            if y in self.grafo[x]['Vizinhos']:
                 return True
-        return False    
+        return False      
 
     def neighbors(self, x) -> list:
         return list(self.grafo[x]['Vizinhos'])
