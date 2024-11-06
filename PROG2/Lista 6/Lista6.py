@@ -65,12 +65,14 @@ def numero_de_ilhas(txt):
             def ilhar(m, n):
                 if (m,n) not in visitados:
                     visitados.append((m, n))
-                    if matrix[m][n] == '1':
-                        for p, q in direcoes:
-                            if (m+p >= 0 and n+q >= 0) and (m+p < len(matrix[0]) and n+q < len(matrix)):
-                                ilhar(m+p, n+q)   
-            if matrix[x][y] == '1' and (x,y) not in visitados:
-                qilha +=1
+                    if (m >= 0 and n >= 0) and (m < len(matrix) and n < len(matrix[0])):
+                        if matrix[m][n] == '1':
+                            for p, q in direcoes:
+                                if (m+p >= 0 and n+q >= 0) and (m+p < len(matrix) and n+q < len(matrix[0])):
+                                    ilhar(m+p, n+q)   
+            if (x >= 0 and y >= 0) and (x < len(matrix) and y < len(matrix[0])):                                
+                if matrix[x][y] == '1' and (x,y) not in visitados:
+                    qilha +=1
 
             ilhar(x,y)    
 
@@ -140,7 +142,6 @@ print(numero_de_ilhas('test_map.txt'))
 #Questão 5
 
 #---------------------------------------------------------------------------------------
-   
 def ilha(txt):
 
     matrix = txt_para_matriz(txt)   
@@ -151,12 +152,14 @@ def ilha(txt):
         for y in range(len(matrix)):
             c = 0
             for p, q in direcoes:
-                if (x+p >= 0 and y+q >= 0) and (x+p < len(matrix[0]) and y+q < len(matrix)):
+                if (x+p > 0 and y+q > 0) and (x+p < len(matrix) and y+q < len(matrix[0])):
                     if matrix[x+p][y+q] == '1':
                         c += 1
-                else:
-                    c+=1        
+                     
             if c == 4:
+                if matrix[x][y] == '1':
+                    continue
+                print(x,y)
                 ilhas.append((x,y)) 
 
     if ilhas:
