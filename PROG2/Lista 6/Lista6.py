@@ -98,9 +98,6 @@ grafo1.add_edge('C','A')
 grafo1.add_edge('D','B')
 grafo1.add_edge('E','B')
 
-print(grafo1.grafo)
-
-
 
 caminho(grafo, 'D')
 
@@ -109,7 +106,6 @@ caminho(grafo, 'D')
 #Questão 3
 
 #---------------------------------------------------------------------------------------
-
 
 def txt_para_matriz(matriz):
 
@@ -135,28 +131,28 @@ def numero_de_ilhas(txt):
     visitados = []
     direcoes = [(0, -1), (1,-1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1)]
     qilha = 0
-    
-    for x in range(len(matrix[0])):
-        for y in range(len(matrix)):
-            
-            def ilhar(m, n):
-                if (m,n) not in visitados:
-                    visitados.append((m, n))
-                    if 0 <= m < len(matrix) and 0 <= n < len(matrix[0]):
-                        if matrix[m][n] == '1':
-                            for p, q in direcoes:
-                                if 0 <= m+p < len(matrix) and 0 <= n+q < len(matrix[0]):
-                                    ilhar(m+p, n+q)   
-            if 0 <= x < len(matrix) and 0 <= y < len(matrix[0]):                               
+
+    def ilhar(m, n):
+        if (m,n) not in visitados:
+            visitados.append((m, n))
+
+            if 0 <= m < len(matrix) and 0 <= n < len(matrix[0]):
+                if matrix[m][n] == '1':
+
+                    for p, q in direcoes:
+                        if 0 <= m+p < len(matrix) and 0 <= n+q < len(matrix[0]):
+                            ilhar(m+p, n+q)  
+
+    for x in range(len(matrix)):
+        for y in range(len(matrix[0])):
+            if 0 <= x < len(matrix) and 0 <= y < len(matrix[0]):                              
                 if matrix[x][y] == '1' and (x,y) not in visitados:
                     qilha +=1
-
-            ilhar(x,y)    
-
+            ilhar(x,y)  
+            
     return qilha               
     
-
-print(numero_de_ilhas('test_map.txt'))
+print(numero_de_ilhas('test.txt'))
 
 #---------------------------------------------------------------------------------------
 
@@ -178,20 +174,22 @@ def numero_de_ilhas_modificado(txt):
     direcoes = [(0, -1), (1,-1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1)]
     qilha = 0
     ilhas = []
+    def ilhar(m, n):
+        if (m,n) not in visitados:
+            visitados.append((m, n))
+            
+            if 0 <= m < len(matrix) and 0 <= n < len(matrix[0]):
+                if matrix[m][n] == '1':
+                    ilha.append((m, n))
 
-    for x in range(len(matrix[0])):
-        for y in range(len(matrix)):
+                    for p, q in direcoes:
+                        if 0 <= m+p < len(matrix) and 0 <= n+p < len(matrix[0]):
+                            ilhar(m+p, n+q) 
+
+    for x in range(len(matrix)):
+        for y in range(len(matrix[0])):
             ilha = []
-            def ilhar(m, n):
-                if (m,n) not in visitados:
-                    visitados.append((m, n))
-                    if 0 <= m < len(matrix) and 0 <= n < len(matrix[0]):
-                        if matrix[m][n] == '1':
-                            ilha.append((m, n))
-                            for p, q in direcoes:
-                                if 0 <= m+p < len(matrix) and 0 <= n+p < len(matrix[0]):
-                                    ilhar(m+p, n+q)   
-     
+
             ilhas.append(ilha)                          
             if 0 <= x < len(matrix) and 0 <= y < len(matrix[0]):
                 if matrix[x][y] == '1' and (x,y) not in visitados:
@@ -211,9 +209,7 @@ def numero_de_ilhas_modificado(txt):
 
     return qilha         
 
-
-
-print(numero_de_ilhas_modificado('test_map.txt'))
+print(numero_de_ilhas_modificado('test.txt'))
 
 
 #---------------------------------------------------------------------------------------
@@ -238,7 +234,6 @@ def ilha(txt):
             if c == 4:
                 if matrix[x][y] == '1':
                     continue
-                print(x,y)
                 ilhas.append((x,y)) 
 
     if ilhas:
@@ -247,4 +242,3 @@ def ilha(txt):
         return None            
 
 print(ilha('test_map.txt'))
-
