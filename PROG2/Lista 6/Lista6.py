@@ -1,3 +1,29 @@
+'''
+Código do map_builder.py do github
+'''
+
+import random
+
+def generateMap(m: int, n: int, ground_water_ration = .2, water = '0', ground = '1' ):
+    r = int(m*n*ground_water_ration+.5)
+    newMap = [[water]*m for _ in range(n)]
+    coord = [(i, j) for i in range(n) for j in range(m)]
+    random.shuffle(coord)
+    for i, j in coord[:r]:
+        newMap[i][j] = ground
+    return newMap
+
+def save_map(map_s, path = 'new_map.txt'):
+    with open(path, 'wt') as f:
+        for row in map_s:
+            f.write("".join(map(str, row)))
+            f.write('\n')
+
+def print_map(map_p):
+    for row in map_p:
+        print("".join(map(str, row)))
+
+
 #---------------------------------------------------------------------------------------
 
 #Questão 1
@@ -134,8 +160,12 @@ print('Vértice',busca_propriedade(grafo1, 30))
 #---------------------------------------------------------------------------------------
 
 '''
-Função apenas para transformar o txt em uma matriz
+Para as questões 3, 4 e 5:
+A função vai receber o arquivo de texto que foi salvo da matriz (da função save_map),
+vai transformar o arquivo em matriz e fazer as operações
 '''
+
+#Função apenas para transformar o txt em uma matriz
 
 def txt_para_matriz(matriz):
 
@@ -184,7 +214,13 @@ def numero_de_ilhas(txt):
 
     return qilha               
     
-
+#Exemplo para teste
+'''
+m1 = generateMap(10, 10, 0.2, 0, 1)
+save_map(m1, 'map_questao3.txt')   
+print_map(m1) 
+print('Número de ilhas: ', numero_de_ilhas('map_questao3.txt'))
+'''
 #---------------------------------------------------------------------------------------
 
 #Questão 4
@@ -276,7 +312,15 @@ def numero_de_ilhas_modificado(txt):
 
     return centroide_menor, centroide_maior   
 
-
+#Exemplo para teste
+'''
+m2 = generateMap(10, 10, 0.2, 0, 1)
+save_map(m2, 'map_questao4.txt')   
+print_map(m2) 
+centroides = numero_de_ilhas_modificado('map_questao4.txt')
+print('Centroide da ilha menor: ', centroides[0])
+print('Centroide da ilha maior: ', centroides[1])
+'''
 #---------------------------------------------------------------------------------------
 
 #Questão 5
@@ -291,7 +335,6 @@ esquerda, direita e abaixo(o que deu a entender da questão)
 E não sei se era pra retornar apenas se a matriz tinha lago ou nao,
 então coloquei para retornar todos os lagos encontrados(caso exista)
 '''
-
 
 def lago(txt):
 
@@ -316,4 +359,17 @@ def lago(txt):
     if ilhas:
         return ilhas
     else:
-        return None            
+        return None    
+
+#Exemplo para teste            
+'''
+m3 = generateMap(10, 10, 0.3, 0, 1)
+save_map(m3, 'map_questao5.txt')   
+print_map(m3) 
+lagos_da_matriz = lago('map_questao5.txt')
+if lagos_da_matriz == None:
+    print('Não há lagos')
+else:
+    print('Lagos: ')
+    print(lagos_da_matriz)
+'''
