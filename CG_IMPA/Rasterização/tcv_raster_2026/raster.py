@@ -56,36 +56,41 @@ if __name__ == "__main__":
 
     #Criar varias cenas com um triângulo
     '''
-    for i in range(1,12):
+    for i in range(1,14):
         parser = argparse.ArgumentParser(description="Raster module main function")
         parser.add_argument('-s', '--scene', type=str, help='Scene name', default='triangle_scene')      
         parser.add_argument('-w', '--window', type=float, nargs=4, help='Window: xmin xmax ymin ymax', default=[0, 4, 0, 4])
         parser.add_argument('-r', '--resolution', type=int, nargs=2, help='Resolution: width height', default=[2**i, 2**i])
-        parser.add_argument('-o', '--output', type=str, help='Output file name', default=f'images_triangle/triangle{2**i}x{2**i}.png')
+        parser.add_argument('-o', '--output', type=str, help='Output file name', default=f'images/triangle{2**i}x{2**i}.png')
         args = parser.parse_args()
 
         main(args)
     '''
 
-    #Criar varias cenas com varios triângulos
+    #Criar varias cenas com dois triângulos
     '''
-    for i in range(1,12):
+    for i in range(1,14):
         parser = argparse.ArgumentParser(description="Raster module main function")
         parser.add_argument('-s', '--scene', type=str, help='Scene name', default='triangle_scene')      
         parser.add_argument('-w', '--window', type=float, nargs=4, help='Window: xmin xmax ymin ymax', default=[0, 5, 0, 5])
         parser.add_argument('-r', '--resolution', type=int, nargs=2, help='Resolution: width height', default=[2**i, 2**i])
-        parser.add_argument('-o', '--output', type=str, help='Output file name', default=f'images_triangle/two_triangle_separate{2**i}x{2**i}.png')
+        parser.add_argument('-o', '--output', type=str, help='Output file name', default=f'images/two_triangle_separate{2**i}x{2**i}.png')
         args = parser.parse_args()
 
         main(args)
     '''
-    
-    #Rasterizar varios lion_scene
-    parser = argparse.ArgumentParser(description="Raster module main function")
-    parser.add_argument('-s', '--scene', type=str, help='Scene name', default='lion_scene')
-    parser.add_argument('-w', '--window', type=float, nargs=4, help='Window: xmin xmax ymin ymax', default=[-200, 400, -25, 425])
-    parser.add_argument('-r', '--resolution', type=int, nargs=2, help='Resolution: width height', default=[800, 600])
-    parser.add_argument('-o', '--output', type=str, help='Output file name', default='output.png')
-    args = parser.parse_args()
 
-    main(args)
+    #=================================================
+    #Atividade 2
+    #=================================================
+    '''
+    for i in range(1,14):
+        parser = argparse.ArgumentParser(description="Raster module main function")
+        parser.add_argument('-s', '--scene', type=str, help='Scene name', default='function_scene')
+        parser.add_argument('-w', '--window', type=float, nargs=4, help='Window: xmin xmax ymin ymax', default=[-2.5, 2.5, -2, 3])
+        parser.add_argument('-r', '--resolution', type=int, nargs=2, help='Resolution: width height', default=[2**i, 2**i])
+        parser.add_argument('-o', '--output', type=str, help='Output file name', default=f'images/function{2**i}x{2**i}.png')
+        args = parser.parse_args()
+
+        main(args)
+        '''
