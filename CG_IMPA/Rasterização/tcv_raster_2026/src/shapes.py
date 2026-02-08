@@ -42,3 +42,25 @@ class ImplicitFunction(Shape):
 
     def in_out(self, point):
         return self.func(point) <= 0
+    
+
+#==========================================
+#Desafio
+#==========================================
+
+class Mandelbrot(Shape):
+    def __init__(self, max_iter=100):
+        super().__init__("mandelbrot")
+        self.max_iter = max_iter
+
+    def in_out(self, point):
+        x, y = point
+        c = complex(x, y)
+        z = 0 + 0j
+
+        for _ in range(self.max_iter):
+            z = z*z + c
+            if abs(z) > 2:
+                return False
+
+        return True

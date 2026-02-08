@@ -96,6 +96,7 @@ if __name__ == "__main__":
     #=================================================
 
     #Função com filtro box e 16 amostras
+    '''
     for i in range(1,12):
         parser = argparse.ArgumentParser(description="Raster module main function")
         parser.add_argument('-s', '--scene', type=str, help='Scene name', default='function_scene')
@@ -109,8 +110,9 @@ if __name__ == "__main__":
         args = parser.parse_args()
 
         main(args)
-
+    '''
     #Função com filtro hat e 16 amostras
+    '''
     for i in range(1,12):
         parser = argparse.ArgumentParser(description="Raster module main function")
         parser.add_argument('-s', '--scene', type=str, help='Scene name', default='function_scene')
@@ -124,9 +126,10 @@ if __name__ == "__main__":
         args = parser.parse_args()
 
         main(args)
-
+    '''
 
     #Leão com filtro box e 16 amostras
+    '''
     for i in range(1,12):
         parser = argparse.ArgumentParser(description="Raster module main function")
         parser.add_argument('-s', '--scene', type=str, help='Scene name', default='lion_scene')      
@@ -141,8 +144,11 @@ if __name__ == "__main__":
         args = parser.parse_args()
 
         main(args)
+    '''
 
     #Leão com filtro hat e 16 amostras
+
+    '''
     for i in range(1,12):
         parser = argparse.ArgumentParser(description="Raster module main function")
         parser.add_argument('-s', '--scene', type=str, help='Scene name', default='lion_scene')      
@@ -157,3 +163,23 @@ if __name__ == "__main__":
         args = parser.parse_args()
 
         main(args)
+    '''
+
+    #==================================
+    #Desafio
+    #==================================
+    
+    #Fractal de Mandelbrot
+
+    parser = argparse.ArgumentParser(description="Raster module main function")
+    parser.add_argument('-s', '--scene', type=str, default='mandelbrot_scene')    
+    parser.add_argument('-w', '--window', type=float, nargs=4, default=[-2.5, 1.5, -2.0, 2.0])
+    parser.add_argument('-r', '--resolution', type=int, nargs=2, default=[8192, 8192])
+    parser.add_argument('-o', '--output', type=str, default=f'images/mandelbrotgaussian8192x8192.png')
+    #Parametros do filtro
+    parser.add_argument('--samples', type=int, default=16)
+    parser.add_argument('--filter', type=str, default='gaussian')
+
+    args = parser.parse_args()
+
+    main(args)
