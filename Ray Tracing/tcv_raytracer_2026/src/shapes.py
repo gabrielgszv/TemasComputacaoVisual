@@ -1,5 +1,7 @@
 from src.vector3d import Vector3D
 from .base import Shape, HitRecord, CastEpsilon
+from .ray import Ray
+import numpy as np
 
 class Ball(Shape):
     def __init__(self, center, radius):
@@ -84,30 +86,34 @@ class ImplicitFunction(Shape):
 
 
 class Cube(Shape):
-    def __init__(self, size):
+    def __init__(self, center, size):
         super().__init__("cube")
+        self.center = center
         self.size = size
 
     def hit(self, ray):
+
+        new_origin = ray.origin - self.center
+        new_ray = Ray(new_origin, ray.direction)
 
         pmin = -self.size / 2
         pmax = self.size / 2
 
         #Eixo x
-        tx1 = (pmin - ray.origin.x) / ray.direction.x
-        tx2 = (pmax - ray.origin.x) / ray.direction.x
+        tx1 = (pmin - new_ray.origin.x) / new_ray.direction.x
+        tx2 = (pmax - new_ray.origin.x) / new_ray.direction.x
         tmin = min(tx1, tx2)
         tmax = max(tx1, tx2)
 
         #Eixo y
-        ty1 = (pmin - ray.origin.y) / ray.direction.y
-        ty2 = (pmax - ray.origin.y) / ray.direction.y
+        ty1 = (pmin - new_ray.origin.y) / new_ray.direction.y
+        ty2 = (pmax - new_ray.origin.y) / new_ray.direction.y
         tmin = max(tmin, min(ty1, ty2))
         tmax = min(tmax, max(ty1, ty2))
 
         #Eixo z
-        tz1 = (pmin - ray.origin.z) / ray.direction.z
-        tz2 = (pmax - ray.origin.z) / ray.direction.z
+        tz1 = (pmin - new_ray.origin.z) / new_ray.direction.z
+        tz2 = (pmax - new_ray.origin.z) / new_ray.direction.z
         tmin = max(tmin, min(tz1, tz2))
         tmax = min(tmax, max(tz1, tz2))
 
@@ -115,7 +121,7 @@ class Cube(Shape):
         if tmax < max(tmin, CastEpsilon):
             return HitRecord(False, float('inf'), None, None)
 
-        point = ray.point_at_parameter(tmin)
+        point = new_ray.point_at_parameter(tmin)
 
         #Normal
         epsilon = 1e-5
@@ -132,16 +138,20 @@ class Cube(Shape):
         else:
             normal = Vector3D(0, 0, 1)
 
-        return HitRecord(True, tmin, point, normal)
+        return HitRecord(True, tmin, point + self.center, normal)
 
 class Cylinder(Shape):
-    def __init__(self, r, h):
+    def __init__(self, center, r, h):
         super().__init__("cylinder")
+        self.center = center
         self.r = r
         self.h = h
 
 
     def hit(self, ray):
+
+        new_origin = ray.origin - self.center
+        new_ray = Ray(new_origin, ray.direction)
 
         #Parametros
         hit, point, normal = False, None, None
@@ -149,9 +159,9 @@ class Cylinder(Shape):
 
         #Lateral do cilindro
 
-        a = ray.direction.x**2 + ray.direction.y**2
-        b = 2*(ray.origin.x*ray.direction.x + ray.origin.y*ray.direction.y)
-        c = ray.origin.x**2 + ray.origin.y**2 - self.r**2
+        a = new_ray.direction.x**2 + new_ray.direction.y**2
+        b = 2*(new_ray.origin.x*new_ray.direction.x + new_ray.origin.y*new_ray.direction.y)
+        c = new_ray.origin.x**2 + new_ray.origin.y**2 - self.r**2
 
         discriminant = b*b - 4*a*c
 
@@ -161,7 +171,7 @@ class Cylinder(Shape):
             t2 = (-b + discriminant**0.5) / (2*a)
 
             if t1 > CastEpsilon:
-                p = ray.point_at_parameter(t1)
+                p = new_ray.point_at_parameter(t1)
                 if abs(p.z) <= self.h/2 and t1 < t_min:
                     t_min = t1
                     hit = True
@@ -169,7 +179,7 @@ class Cylinder(Shape):
                     normal = Vector3D(p.x, p.y, 0).normalize()
 
             if t2 > CastEpsilon:
-                p = ray.point_at_parameter(t2)
+                p = new_ray.point_at_parameter(t2)
                 if abs(p.z) <= self.h/2 and t2 < t_min:
                     t_min = t2
                     hit = True
@@ -177,9 +187,9 @@ class Cylinder(Shape):
                     normal = Vector3D(p.x, p.y, 0).normalize()
 
         #Tampa superior
-        t_top = (self.h/2 - ray.origin.z)/ray.direction.z
+        t_top = (self.h/2 - new_ray.origin.z)/new_ray.direction.z
         if t_top > CastEpsilon:
-            p = ray.point_at_parameter(t_top)
+            p = new_ray.point_at_parameter(t_top)
             if p.x**2 + p.y**2 <= self.r**2:
                 if t_top < t_min:
                     t_min = t_top
@@ -188,9 +198,9 @@ class Cylinder(Shape):
                     normal = Vector3D(0,0,1)
 
         #Tampa inferior
-        t_bottom = (-self.h/2 - ray.origin.z)/ray.direction.z
+        t_bottom = (-self.h/2 - new_ray.origin.z)/new_ray.direction.z
         if t_bottom > CastEpsilon:
-            p = ray.point_at_parameter(t_bottom)
+            p = new_ray.point_at_parameter(t_bottom)
             if p.x**2 + p.y**2 <= self.r**2:
                 if t_bottom < t_min:
                     t_min = t_bottom
@@ -199,3 +209,49 @@ class Cylinder(Shape):
                     normal = Vector3D(0,0,-1)
 
         return HitRecord(hit, t_min, point, normal)
+
+#============================================
+# Parte 2 da Tarefa
+#============================================
+
+class ObjectTransform(Shape):
+    def __init__(self, obj, matrix):
+        super().__init__('objectTransform')
+        self.obj = obj
+        self.matrix = np.array(matrix)
+
+    def hit(self, ray):
+
+        #Converter raio para o numpy
+        org = np.array([ray.origin.x, ray.origin.y, ray.origin.z])
+        dir = np.array([ray.direction.x, ray.direction.y, ray.direction.z])
+        M_inv = np.linalg.inv(self.matrix)
+
+        #Transformar raio da cena para o espaço do objeto
+        origin_obj = M_inv @ org
+        direction_obj = M_inv @ dir
+
+        ray_obj = Ray(Vector3D(origin_obj[0], origin_obj[1], origin_obj[2]), Vector3D(direction_obj[0], direction_obj[1], direction_obj[2]))
+
+        #Onde raio bateu com o objeto
+        raio = self.obj.hit(ray_obj)
+
+        if not raio.hit:
+            return raio
+        
+        #Transformar ponto do espaço do objeto de volta para a cena
+        point = np.array([raio.point.x, raio.point.y, raio.point.z])
+        point_world = self.matrix @ point
+
+        #Normal
+        normal = np.array([raio.normal.x, raio.normal.y, raio.normal.z])
+        normal_world = M_inv.T @ normal
+        normal_world = normal_world / np.linalg.norm(normal_world)
+
+        return HitRecord(
+            True,
+            raio.t,
+            Vector3D(point_world[0], point_world[1], point_world[2]),
+            Vector3D(normal_world[0], normal_world[1], normal_world[2])
+        )
+

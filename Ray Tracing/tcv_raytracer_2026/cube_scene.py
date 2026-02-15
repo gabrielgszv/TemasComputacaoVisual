@@ -1,7 +1,7 @@
 # defines a scene with a ball using implicit function
 import math
 from src.base import BaseScene, Color
-from src.shapes import Ball, PlaneUV, Cube, Cylinder
+from src.shapes import Ball, PlaneUV, Cube, Cylinder, ObjectTransform
 from src.camera import Camera
 from src.vector3d import Vector3D
 from src.light import PointLight, AreaLight
@@ -38,21 +38,68 @@ class Scene(BaseScene):
             )
         ]
 
-        #Cubo azul
-        blue_material = SimpleMaterial(
-            ambient_coefficient=1,
-            diffuse_coefficient=0.2,
-            diffuse_color=Color(0, 0, 0.5),
-            specular_coefficient=0.5,
-            specular_color=Color(1, 1, 0),
+        #Materiais
+
+        red_material = SimpleMaterial(
+            ambient_coefficient=0.2,
+            diffuse_coefficient=0.6,
+            diffuse_color=Color(0.8, 0.1, 0.1),
+            specular_coefficient=0.3,
+            specular_color=Color(1, 1, 1),
             specular_shininess=32
         )
 
-        self.add(
-            Cylinder(r=0.5, h=2), 
-            blue_material
+        blue_material = SimpleMaterial(
+            ambient_coefficient=0.2,
+            diffuse_coefficient=0.6,
+            diffuse_color=Color(0.1, 0.1, 0.8),
+            specular_coefficient=0.3,
+            specular_color=Color(1, 1, 1),
+            specular_shininess=32
         )
+        '''
+        self.add(
+            Cylinder(center=Vector3D(-3, -2, 1), r=1, h=2),
+            blue_material
+        )'''
+        '''        
+        self.add(
+            Cube(center=Vector3D(-5, 2, 1), size=2),
+            red_material
+        )
+        '''
+        
+        angle = math.radians(45)
+        Rz = [
+            [math.cos(angle), -math.sin(angle), 0],
+            [math.sin(angle),  math.cos(angle), 0],
+            [0, 0, 1]
+        ]
 
+        self.add(ObjectTransform(Cube(center=Vector3D(-5, 2, 1), size=2), Rz), red_material)
+
+        
+
+        '''
+        #Girar o negocio
+
+        angle = math.radians(45)
+
+        Rz = [
+            [math.cos(angle), -math.sin(angle), 0],
+            [math.sin(angle),  math.cos(angle), 0],
+            [0, 0, 1]
+        ]
+
+        self.add(
+                ObjectTransform(
+                    Cube(center=Vector3D(1, 3, 2),size=1),
+                    Rz
+                ),
+                blue_material
+            )
+
+        '''
         # ground plane
         gray_material = CheckerboardMaterial(
             ambient_coefficient=1,
