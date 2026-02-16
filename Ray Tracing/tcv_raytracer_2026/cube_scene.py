@@ -62,13 +62,13 @@ class Scene(BaseScene):
             Cylinder(center=Vector3D(-3, -2, 1), r=1, h=2),
             blue_material
         )'''
-        '''        
+        '''     
         self.add(
             Cube(center=Vector3D(-5, 2, 1), size=2),
             red_material
         )
         '''
-        
+             
         angle = math.radians(45)
         Rz = [
             [math.cos(angle), -math.sin(angle), 0],
@@ -78,7 +78,6 @@ class Scene(BaseScene):
 
         self.add(ObjectTransform(Cube(center=Vector3D(-5, 2, 1), size=2), Rz), red_material)
 
-        
 
         '''
         #Girar o negocio

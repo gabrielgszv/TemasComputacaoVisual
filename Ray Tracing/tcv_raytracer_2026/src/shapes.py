@@ -208,7 +208,7 @@ class Cylinder(Shape):
                     point = p
                     normal = Vector3D(0,0,-1)
 
-        return HitRecord(hit, t_min, point, normal)
+        return HitRecord(hit, t_min, point + self.center, normal)
 
 #============================================
 # Parte 2 da Tarefa
@@ -219,17 +219,19 @@ class ObjectTransform(Shape):
         super().__init__('objectTransform')
         self.obj = obj
         self.matrix = np.array(matrix)
+        self.M_inv = np.linalg.inv(self.matrix)
 
     def hit(self, ray):
 
         #Converter raio para o numpy
         org = np.array([ray.origin.x, ray.origin.y, ray.origin.z])
         dir = np.array([ray.direction.x, ray.direction.y, ray.direction.z])
-        M_inv = np.linalg.inv(self.matrix)
+
+        center = np.array([self.obj.center.x, self.obj.center.y, self.obj.center.z])
 
         #Transformar raio da cena para o espaço do objeto
-        origin_obj = M_inv @ org
-        direction_obj = M_inv @ dir
+        origin_obj = self.M_inv @ (org - center) + center
+        direction_obj = self.M_inv @ dir
 
         ray_obj = Ray(Vector3D(origin_obj[0], origin_obj[1], origin_obj[2]), Vector3D(direction_obj[0], direction_obj[1], direction_obj[2]))
 
@@ -241,17 +243,18 @@ class ObjectTransform(Shape):
         
         #Transformar ponto do espaço do objeto de volta para a cena
         point = np.array([raio.point.x, raio.point.y, raio.point.z])
-        point_world = self.matrix @ point
+        point_world = self.matrix @ (point - center) + center
 
         #Normal
         normal = np.array([raio.normal.x, raio.normal.y, raio.normal.z])
-        normal_world = M_inv.T @ normal
+        normal_world = self.M_inv.T @ normal
         normal_world = normal_world / np.linalg.norm(normal_world)
+
+        t_world = np.dot(point_world - org, dir) / np.dot(dir, dir)
 
         return HitRecord(
             True,
-            raio.t,
+            t_world,
             Vector3D(point_world[0], point_world[1], point_world[2]),
             Vector3D(normal_world[0], normal_world[1], normal_world[2])
         )
-

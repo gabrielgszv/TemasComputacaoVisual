@@ -86,8 +86,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Raster module main function")
     parser.add_argument('-s', '--scene', type=str, help='Scene name', default='cube_scene')
     parser.add_argument('-n', '--num_samples', type=int, help='Number of samples per pixel for anti-aliasing', default=1)
-    parser.add_argument('-j', '--num_jobs', type=int, help='Number of parallel jobs for rendering', default=16)
-    parser.add_argument('-o', '--output', type=str, help='Output image file name', default='cube_scene.png')
+    parser.add_argument('-j', '--num_jobs', type=int, help='Number of parallel jobs for rendering', default=32)
+    parser.add_argument('-o', '--output', type=str, help='Output image file name', default='cube_rotate_scene.png')
     args = parser.parse_args()
 
     # create a pool of workers for parallel processing
