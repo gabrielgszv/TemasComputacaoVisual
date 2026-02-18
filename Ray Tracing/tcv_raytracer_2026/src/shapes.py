@@ -216,7 +216,7 @@ class Cylinder(Shape):
 
 class ObjectTransform(Shape):
     def __init__(self, obj, matrix):
-        super().__init__('objectTransform')
+        super().__init__("objectTransform")
         self.obj = obj
         self.matrix = np.array(matrix)
         self.M_inv = np.linalg.inv(self.matrix)
@@ -258,3 +258,112 @@ class ObjectTransform(Shape):
             Vector3D(point_world[0], point_world[1], point_world[2]),
             Vector3D(normal_world[0], normal_world[1], normal_world[2])
         )
+    
+#============================================
+# Parte 3 da Tarefa
+#============================================
+
+class Surface(Shape):
+
+    def __init__(self, func, center=Vector3D(0,0,0)):
+
+        super().__init__("implicit")
+        self.func = func
+        self.center = center
+        self.box_min = center + Vector3D(-2,-2,-2)
+        self.box_max = center + Vector3D(2,2,2)
+
+    #Função para calcular g(t) = f(r(t))
+    def g(self, ray, t):
+        p = ray.point_at_parameter(t)
+        p_local = p - self.center
+        return self.func(p_local.x, p_local.y, p_local.z)
+
+    #Função para calcular o gradiente
+    def gradient(self, x, y, z):
+
+        eps = 1e-5
+
+        dx = (self.func(x+eps,y,z) - self.func(x-eps,y,z))/(2*eps)
+        dy = (self.func(x,y+eps,z) - self.func(x,y-eps,z))/(2*eps)
+        dz = (self.func(x,y,z+eps) - self.func(x,y,z-eps))/(2*eps)
+
+        return Vector3D(dx,dy,dz).normalize()
+
+    #Função para retornar o tempo que o raio entra e sai do box (se intersectar)
+    def intersect_box(self, ray):
+
+        tmin = -float("inf")
+        tmax = float("inf")
+
+        #Para cada eixo
+        for axis in ['x','y','z']:
+
+            origin = getattr(ray.origin, axis)
+            direction = getattr(ray.direction, axis)
+            bmin = getattr(self.box_min, axis)
+            bmax = getattr(self.box_max, axis)
+
+            if abs(direction) < 1e-8:
+                if origin < bmin or origin > bmax:
+                    return None, None
+            else:
+                t1 = (bmin-origin)/direction
+                t2 = (bmax-origin)/direction
+                tmin = max(tmin, min(t1,t2))
+                tmax = min(tmax, max(t1,t2))
+
+        if tmax < max(tmin, 0):
+            return None, None
+
+        return tmin, tmax
+
+    #Metodo da bisseção para encontrar g(t) = 0
+    def bisection(self, ray, a, b):
+
+        for _ in range(25):
+            mid = (a+b)/2
+            if abs(self.g(ray,mid)) < 1e-6:
+                return mid
+            if self.g(ray,a)*self.g(ray,mid) < 0:
+                b = mid
+            else:
+                a = mid
+
+        return (a+b)/2
+
+
+    def hit(self, ray):
+
+        #Tempo de entrada e de saída da caixa
+        t_entry, t_exit = self.intersect_box(ray)
+
+        if t_entry is None:
+            return HitRecord(False, float('inf'), None, None)
+
+        dt = (t_exit - t_entry)/100
+
+        t_prev = t_entry
+        g_prev = self.g(ray, t_prev)
+
+        for i in range(1, 100):
+            
+            t_curr = t_entry + i*dt
+            g_curr = self.g(ray, t_curr)
+
+            if g_prev*g_curr <= 0:
+
+                t_root = self.bisection(ray, t_prev, t_curr)
+
+                point = ray.point_at_parameter(t_root)
+                p_local = point - self.center
+                normal = self.gradient(p_local.x,
+                                       p_local.y,
+                                       p_local.z)
+
+                return HitRecord(True, t_root, point, normal)
+
+            t_prev = t_curr
+            g_prev = g_curr
+
+        return HitRecord(False, float('inf'), None, None)
