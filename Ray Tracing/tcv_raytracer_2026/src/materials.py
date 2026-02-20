@@ -190,3 +190,38 @@ class TranslucidMaterial(SimpleMaterial):
         shaded_color += transmitted_color
 
         return shaded_color
+
+#============================================
+# Parte 4 da Tarefa
+#============================================
+
+class MirrorMaterial(Material):
+
+   def __init__(self, reflection_coefficient = 1.0):
+       super().__init__()
+       self.reflection_coefficient = reflection_coefficient
+
+   def shade(self, hit_record, scene):
+
+       #Se o raio atingiu o limite de recursão
+       if hit_record.ray.depth >= scene.max_depth:
+           return Color(0, 1, 0)
+
+       #Direção e normal do raio
+       view_dir = hit_record.ray.direction
+       normal = hit_record.normal
+
+       #Raio refletido
+       #r = d - 2(d·n)n
+       reflect_dir = (view_dir - normal * 2 * view_dir.dot(normal)).normalize()
+
+       #Traçar novo raio
+       reflection_ray = Ray(hit_record.point, reflect_dir, hit_record.ray.depth + 1)
+       reflection_hit = scene.hit(reflection_ray)
+
+       if reflection_hit.hit:
+           reflection_color = reflection_hit.material.shade(reflection_hit, scene)
+       else:
+           reflection_color = scene.background
+
+       return reflection_color * self.reflection_coefficient

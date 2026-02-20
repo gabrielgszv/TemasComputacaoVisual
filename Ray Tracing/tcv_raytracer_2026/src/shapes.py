@@ -208,6 +208,9 @@ class Cylinder(Shape):
                     point = p
                     normal = Vector3D(0,0,-1)
 
+        if not hit:
+            return HitRecord(False, None, None, None)
+
         return HitRecord(hit, t_min, point + self.center, normal)
 
 #============================================

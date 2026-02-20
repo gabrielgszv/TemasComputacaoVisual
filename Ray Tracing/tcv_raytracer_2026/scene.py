@@ -41,14 +41,15 @@ class Scene(BaseScene):
         ]
 
         #Materiais
-
-        red_material = SimpleMaterial(
-            ambient_coefficient=0.2,
-            diffuse_coefficient=0.6,
-            diffuse_color=Color(0.8, 0.1, 0.1),
-            specular_coefficient=0.3,
+        red_material = TranslucidMaterial(
+            ambient_coefficient=0.05,
+            diffuse_coefficient=0.2,
+            diffuse_color=Color(0.5, 0, 0),
+            specular_coefficient=0.1,
             specular_color=Color(1, 1, 1),
-            specular_shininess=32
+            specular_shininess=32,
+            transmission_coefficient=0.8,
+            refraction_index=1.5
         )
 
         #Objeto
@@ -58,7 +59,7 @@ class Scene(BaseScene):
             [math.sin(angle),  math.cos(angle), 0],
             [0              ,  0              , 1]
         ]
-        self.add(ObjectTransform(Surface(func=mitchel_function, center=Vector3D(-3,0,2)), Rz), red_material)
+        self.add(ObjectTransform(Cube(center=Vector3D(1,0,2), size=1), Rz), red_material)
 
         # ground plane
         gray_material = CheckerboardMaterial(

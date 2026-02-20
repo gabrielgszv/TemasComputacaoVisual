@@ -70,24 +70,11 @@ def main(args, pool):
     plt.imsave(args.output, image, vmin=0, vmax=1, origin='lower')
 
 if __name__ == "__main__":
-    '''parser = argparse.ArgumentParser(description="Raster module main function")
-    parser.add_argument('-s', '--scene', type=str, help='Scene name', default='ball_scene')
-    parser.add_argument('-n', '--num_samples', type=int, help='Number of samples per pixel for anti-aliasing', default=1)
-    parser.add_argument('-j', '--num_jobs', type=int, help='Number of parallel jobs for rendering', default=4)
-    parser.add_argument('-o', '--output', type=str, help='Output image file name', default='ball_scene.png')
-    args = parser.parse_args()
-
-    # create a pool of workers for parallel processing
-    pool = Pool(args.num_jobs)
-    main(args, pool)
-    pool.close()
-    pool.join()'''
-
     parser = argparse.ArgumentParser(description="Raster module main function")
-    parser.add_argument('-s', '--scene', type=str, help='Scene name', default='scene')
+    parser.add_argument('-s', '--scene', type=str, help='Scene name', default='mirror_scene')
     parser.add_argument('-n', '--num_samples', type=int, help='Number of samples per pixel for anti-aliasing', default=16)
     parser.add_argument('-j', '--num_jobs', type=int, help='Number of parallel jobs for rendering', default=32)
-    parser.add_argument('-o', '--output', type=str, help='Output image file name', default='mitchel_45g_16a.png')
+    parser.add_argument('-o', '--output', type=str, help='Output image file name', default='mirror_scene_ball_max20.png')
     args = parser.parse_args()
 
     # create a pool of workers for parallel processing
